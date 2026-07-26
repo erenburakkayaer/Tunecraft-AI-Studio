@@ -10,6 +10,11 @@ Tunecraft AI Studio is an AI-powered web application designed to apply professio
 
 ## Screenshots
 
+### Artist List
+Browse and search over 230 artist presets.
+
+![Artist List](docs/screenshots/artist-list.jpg)
+
 ### AI Vocal Matching
 Pick an artist and Tunecraft's AI tunes the vocal chain (EQ, reverb, autotune) to match their signature sound.
 
