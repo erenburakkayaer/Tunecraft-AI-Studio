@@ -286,6 +286,7 @@ function ArtistPicker({onSelect,onBack}) {
       <div className="picker-grid">
         {list.map(p=>(
           <button key={p} className="picker-card" onClick={()=>onSelect(p)}>
+            {p!=='manuel' && <span className="picker-ai-badge">✨ AI</span>}
             <span className="picker-avatar">{p==='manuel'?'⚙️':'🎤'}</span>
             <span className="picker-name">{p==='manuel'?'Manual (No Effects)':fmt(p)}</span>
           </button>

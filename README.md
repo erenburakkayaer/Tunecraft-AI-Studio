@@ -11,7 +11,7 @@ Tunecraft AI Studio is an AI-powered web application designed to apply professio
 ## Screenshots
 
 ### Artist List
-Browse and search over 230 artist presets.
+Browse and search over 230 artist presets, each tuned by AI.
 
 ![Artist List](docs/screenshots/artist-list.jpg)
 
