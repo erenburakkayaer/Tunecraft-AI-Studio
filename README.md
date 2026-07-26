@@ -8,10 +8,15 @@ Tunecraft AI Studio is an AI-powered web application designed to apply professio
 - **Local Processing:** High-performance audio manipulation using Python-based tools.
 - **Real-time Effects:** Pitch correction, EQ, and compression built for studio-quality sound.
 
-## Ekran Görüntüleri
+## Screenshots
+
+### AI Vocal Matching
+Pick an artist and Tunecraft's AI tunes the vocal chain (EQ, reverb, autotune) to match their signature sound.
+
+![AI Vocal Matching](docs/screenshots/ai-vocal-matching.jpg)
 
 ### Studio
 ![Studio](docs/screenshots/studio.jpg)
 
-### Abonelik
+### Subscription
 ![Paywall](docs/screenshots/paywall.jpg)

@@ -15,10 +15,10 @@ export default function PaywallPage({ session }) {
       if (data.url) {
         window.location.href = data.url
       } else {
-        toast.error('Ödeme sistemi bağlanamadı.')
+        toast.error('Could not connect to the payment system.')
       }
     } catch {
-      toast.error('Bir hata oluştu, tekrar dene.')
+      toast.error('An error occurred, please try again.')
     }
   }
 
@@ -30,28 +30,28 @@ export default function PaywallPage({ session }) {
     <div className="paywall-page">
       <div className="paywall-card">
         <div className="paywall-icon">🔐</div>
-        <h2>Ücretsiz deneme hakkın doldu</h2>
-        <p>Tunecraft'ı kullanmaya devam etmek için abone ol. Tüm özelliklere sınırsız eriş.</p>
+        <h2>Your free trial has ended</h2>
+        <p>Subscribe to keep using Tunecraft. Unlimited access to all features.</p>
 
         <div className="plan-box">
-          <div className="plan-badge">⭐ En Popüler</div>
-          <div className="plan-price">$10<span>/ay</span></div>
+          <div className="plan-badge">⭐ Most Popular</div>
+          <div className="plan-price">$10<span>/mo</span></div>
           <ul className="plan-features">
-            <li>Sınırsız ses işleme</li>
-            <li>50+ sanatçı preset'i (Drake, Travis, Ezhel, Sagopa...)</li>
-            <li>Beat + Vokal birleştirme stüdyosu</li>
-            <li>Yüksek kalite ses çıktısı (WAV / MP3)</li>
-            <li>Öncelikli işlem kuyruğu</li>
-            <li>İstediğin zaman iptal et</li>
+            <li>Unlimited audio processing</li>
+            <li>50+ artist presets (Drake, Travis, Ezhel, Sagopa...)</li>
+            <li>Beat + Vocal mixing studio</li>
+            <li>High-quality audio output (WAV / MP3)</li>
+            <li>Priority processing queue</li>
+            <li>Cancel anytime</li>
           </ul>
         </div>
 
         <button className="btn-primary" onClick={handleSubscribe}>
-          💳 Şimdi Abone Ol — $10/ay
+          💳 Subscribe Now — $10/mo
         </button>
 
         <button className="paywall-logout" onClick={handleLogout}>
-          Çıkış yap
+          Log out
         </button>
       </div>
     </div>

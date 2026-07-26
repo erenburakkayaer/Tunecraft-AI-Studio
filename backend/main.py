@@ -46,7 +46,7 @@ def get_user_profile(user_id: str):
 
 @app.get("/")
 def root():
-    return {"status": "Tunecraft API çalışıyor 🎵"}
+    return {"status": "Tunecraft API is running 🎵"}
 
 
 @app.get("/user/status")

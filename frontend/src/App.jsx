@@ -33,7 +33,7 @@ function App() {
 
           if (isNewUser) {
             await supabase.auth.signOut()
-            toast.error('Bu Google hesabı kayıtlı değil. Lütfen önce "Kayıt Ol" sekmesinden kayıt ol.')
+            toast.error('This Google account is not registered. Please sign up first from the "Sign Up" tab.')
             return
           }
         }

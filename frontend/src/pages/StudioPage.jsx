@@ -82,13 +82,13 @@ function audioBufferToWav(buffer) {
   return new Blob([bufferArray], { type: "audio/wav" });
 }
 
-window.onerror = function(msg, url, line) { toast.error("Hata: " + msg); };
+window.onerror = function(msg, url, line) { toast.error("Error: " + msg); };
 window.addEventListener("unhandledrejection", function(e) {
-  toast.error("Promise Hatası: " + (e.reason?.message || e.reason));
+  toast.error("Promise Error: " + (e.reason?.message || e.reason));
 });
 
 const ROOTS = ['C','C#','D','Eb','E','F','F#','G','Ab','A','Bb','B']
-const SCALES = ['Kromatik','Majör','Doğal Minör','Harmonik Minör','Pentatonik Min','Blues','Dorian']
+const SCALES = ['Chromatic','Major','Natural Minor','Harmonic Minor','Minor Pentatonic','Blues','Dorian']
 const DEF_FX = {autotune:60,reverb:30,eqBass:0,eqMid:0,eqTreble:0,pitch:0,volume:100,atRoot:'C',atScale:'Kromatik'}
 const uid = () => Math.random().toString(36).substr(2, 9)
 
@@ -159,16 +159,16 @@ function SubscriptionModal({onClose}) {
         <div style={{textAlign:'center',marginBottom:'28px'}}>
           <div style={{fontSize:'48px',marginBottom:'12px'}}>🎵</div>
           <h2 style={{fontSize:'26px',fontWeight:'900',color:'#0f172a',marginBottom:'8px'}}>Tunecraft Pro</h2>
-          <p style={{color:'#64748b',fontSize:'15px'}}>Sınırsız kayıt, tüm sanatçı presetleri ve daha fazlası.</p>
+          <p style={{color:'#64748b',fontSize:'15px'}}>Unlimited recording, all artist presets, and more.</p>
         </div>
         <div style={{background:'linear-gradient(135deg,#f0f9ff,#e0f2fe)',border:'2px solid #0ea5e9',borderRadius:'16px',padding:'24px',marginBottom:'24px',position:'relative'}}>
-          <div style={{position:'absolute',top:'-1px',right:'20px',background:'#0ea5e9',color:'#fff',fontSize:'11px',fontWeight:'700',padding:'4px 14px',borderRadius:'0 0 10px 10px',textTransform:'uppercase',letterSpacing:'1px'}}>En Popüler</div>
+          <div style={{position:'absolute',top:'-1px',right:'20px',background:'#0ea5e9',color:'#fff',fontSize:'11px',fontWeight:'700',padding:'4px 14px',borderRadius:'0 0 10px 10px',textTransform:'uppercase',letterSpacing:'1px'}}>Most Popular</div>
           <div style={{display:'flex',alignItems:'baseline',gap:'4px',marginBottom:'16px'}}>
             <span style={{fontSize:'48px',fontWeight:'900',color:'#0f172a'}}>$10</span>
-            <span style={{fontSize:'16px',color:'#64748b'}}>/ay</span>
+            <span style={{fontSize:'16px',color:'#64748b'}}>/mo</span>
           </div>
           <ul style={{listStyle:'none',display:'flex',flexDirection:'column',gap:'10px'}}>
-            {['Sınırsız vokal kaydı','Tüm 200+ sanatçı preseti','Yüksek kalite WAV export','Profesyonel FX zinciri','Öncelikli destek'].map(f=>(
+            {['Unlimited vocal recording','All 200+ artist presets','High-quality WAV export','Professional FX chain','Priority support'].map(f=>(
               <li key={f} style={{display:'flex',alignItems:'center',gap:'10px',color:'#334155',fontSize:'14px'}}>
                 <span style={{color:'#10b981',fontWeight:'700'}}>✓</span>{f}
               </li>
@@ -176,10 +176,10 @@ function SubscriptionModal({onClose}) {
           </ul>
         </div>
         <button
-          onClick={()=>{ toast('Stripe ödeme sayfasına yönlendiriliyorsunuz...'); onClose(); }}
+          onClick={()=>{ toast('Redirecting you to the Stripe payment page...'); onClose(); }}
           style={{width:'100%',background:'linear-gradient(135deg,#0ea5e9,#38bdf8)',color:'#fff',border:'none',borderRadius:'12px',padding:'16px',fontSize:'16px',fontWeight:'700',cursor:'pointer',boxShadow:'0 4px 20px rgba(14,165,233,0.4)',marginBottom:'12px'}}
-        >Üye Ol — $10/ay</button>
-        <p style={{textAlign:'center',fontSize:'12px',color:'#94a3b8'}}>İstediğin zaman iptal edebilirsin. Gizli ücret yok.</p>
+        >Subscribe — $10/mo</button>
+        <p style={{textAlign:'center',fontSize:'12px',color:'#94a3b8'}}>Cancel anytime. No hidden fees.</p>
       </div>
     </div>
   )
@@ -192,12 +192,12 @@ function AccountDrawer({session, onClose, onLogout}) {
   const [loading, setLoading] = useState(false)
 
   const handleChangePassword = async () => {
-    if(!newPassword || newPassword.length < 6) { toast.error('Şifre en az 6 karakter olmalı'); return }
+    if(!newPassword || newPassword.length < 6) { toast.error('Password must be at least 6 characters'); return }
     setLoading(true)
     const { error } = await supabase.auth.updateUser({ password: newPassword })
     setLoading(false)
     if(error) toast.error(error.message)
-    else { toast.success('Şifre güncellendi!'); setNewPassword(''); setTab('main') }
+    else { toast.success('Password updated!'); setNewPassword(''); setTab('main') }
   }
 
   const handleChangeProfile = async () => {
@@ -205,12 +205,12 @@ function AccountDrawer({session, onClose, onLogout}) {
     const { error } = await supabase.auth.updateUser({ data: { username: newName } })
     setLoading(false)
     if(error) toast.error(error.message)
-    else { toast.success('Profil güncellendi!'); setTab('main') }
+    else { toast.success('Profile updated!'); setTab('main') }
   }
 
   const handleDeleteAccount = async () => {
-    if(!window.confirm('Hesabını silmek istediğine emin misin? Bu işlem geri alınamaz.')) return
-    toast.error('Hesap silme için destek ekibiyle iletişime geç.')
+    if(!window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) return
+    toast.error('Please contact support to delete your account.')
   }
 
   return (
@@ -218,7 +218,7 @@ function AccountDrawer({session, onClose, onLogout}) {
       <div style={{background:'#fff',width:'340px',height:'100vh',boxShadow:'-8px 0 40px rgba(0,0,0,0.12)',display:'flex',flexDirection:'column',overflow:'hidden'}} onClick={e=>e.stopPropagation()}>
         <div style={{padding:'20px 20px 16px',borderBottom:'1px solid #e2e8f0',display:'flex',alignItems:'center',justifyContent:'space-between',background:'linear-gradient(135deg,#f0f9ff,#f8fafc)'}}>
           <div>
-            <div style={{fontWeight:'800',fontSize:'16px',color:'#0f172a'}}>Hesap Ayarları</div>
+            <div style={{fontWeight:'800',fontSize:'16px',color:'#0f172a'}}>Account Settings</div>
             <div style={{fontSize:'12px',color:'#64748b',marginTop:'2px'}}>{session.user.email}</div>
           </div>
           <button onClick={onClose} style={{background:'none',border:'none',fontSize:'20px',cursor:'pointer',color:'#94a3b8'}}>✕</button>
@@ -228,40 +228,40 @@ function AccountDrawer({session, onClose, onLogout}) {
           <div style={{flex:1,display:'flex',flexDirection:'column',padding:'16px',gap:'8px'}}>
             <button onClick={()=>setTab('profile')} style={{display:'flex',alignItems:'center',gap:'12px',padding:'14px 16px',background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:'12px',cursor:'pointer',textAlign:'left',width:'100%'}}>
               <span style={{fontSize:'22px'}}>👤</span>
-              <div><div style={{fontWeight:'600',fontSize:'14px',color:'#0f172a'}}>Bilgileri Değiştir</div><div style={{fontSize:'12px',color:'#64748b'}}>Kullanıcı adını güncelle</div></div>
+              <div><div style={{fontWeight:'600',fontSize:'14px',color:'#0f172a'}}>Edit Info</div><div style={{fontSize:'12px',color:'#64748b'}}>Update your username</div></div>
             </button>
             <button onClick={()=>setTab('password')} style={{display:'flex',alignItems:'center',gap:'12px',padding:'14px 16px',background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:'12px',cursor:'pointer',textAlign:'left',width:'100%'}}>
               <span style={{fontSize:'22px'}}>🔑</span>
-              <div><div style={{fontWeight:'600',fontSize:'14px',color:'#0f172a'}}>Şifre Değiştir</div><div style={{fontSize:'12px',color:'#64748b'}}>Hesap şifreni güncelle</div></div>
+              <div><div style={{fontWeight:'600',fontSize:'14px',color:'#0f172a'}}>Change Password</div><div style={{fontSize:'12px',color:'#64748b'}}>Update your account password</div></div>
             </button>
             <div style={{flex:1}}/>
             <button onClick={onLogout} style={{display:'flex',alignItems:'center',gap:'12px',padding:'14px 16px',background:'#fff7ed',border:'1px solid #fed7aa',borderRadius:'12px',cursor:'pointer',textAlign:'left',width:'100%'}}>
               <span style={{fontSize:'22px'}}>🚪</span>
-              <div><div style={{fontWeight:'600',fontSize:'14px',color:'#ea580c'}}>Çıkış Yap</div><div style={{fontSize:'12px',color:'#9a3412'}}>Oturumu kapat</div></div>
+              <div><div style={{fontWeight:'600',fontSize:'14px',color:'#ea580c'}}>Log Out</div><div style={{fontSize:'12px',color:'#9a3412'}}>Sign out of your session</div></div>
             </button>
             <button onClick={handleDeleteAccount} style={{display:'flex',alignItems:'center',gap:'12px',padding:'14px 16px',background:'#fff1f2',border:'1px solid #fecdd3',borderRadius:'12px',cursor:'pointer',textAlign:'left',width:'100%'}}>
               <span style={{fontSize:'22px'}}>🗑️</span>
-              <div><div style={{fontWeight:'600',fontSize:'14px',color:'#e11d48'}}>Hesabı Sil</div><div style={{fontSize:'12px',color:'#9f1239'}}>Kalıcı olarak sil</div></div>
+              <div><div style={{fontWeight:'600',fontSize:'14px',color:'#e11d48'}}>Delete Account</div><div style={{fontSize:'12px',color:'#9f1239'}}>Permanently delete</div></div>
             </button>
           </div>
         )}
 
         {tab === 'password' && (
           <div style={{flex:1,padding:'20px',display:'flex',flexDirection:'column',gap:'16px'}}>
-            <button onClick={()=>setTab('main')} style={{display:'flex',alignItems:'center',gap:'8px',background:'none',border:'none',color:'#0ea5e9',fontSize:'14px',cursor:'pointer',padding:0,fontWeight:'600'}}>← Geri</button>
-            <h3 style={{fontSize:'18px',fontWeight:'700',color:'#0f172a'}}>Şifre Değiştir</h3>
-            <input type="password" placeholder="Yeni şifre (min 6 karakter)" value={newPassword} onChange={e=>setNewPassword(e.target.value)} style={{padding:'12px 16px',border:'1px solid #e2e8f0',borderRadius:'10px',fontSize:'14px',outline:'none',fontFamily:'inherit'}}/>
-            <button onClick={handleChangePassword} disabled={loading} style={{padding:'13px',background:'#0ea5e9',color:'#fff',border:'none',borderRadius:'10px',fontWeight:'700',fontSize:'14px',cursor:'pointer',opacity:loading?0.6:1}}>{loading ? 'Güncelleniyor...' : 'Şifreyi Güncelle'}</button>
+            <button onClick={()=>setTab('main')} style={{display:'flex',alignItems:'center',gap:'8px',background:'none',border:'none',color:'#0ea5e9',fontSize:'14px',cursor:'pointer',padding:0,fontWeight:'600'}}>← Back</button>
+            <h3 style={{fontSize:'18px',fontWeight:'700',color:'#0f172a'}}>Change Password</h3>
+            <input type="password" placeholder="New password (min 6 characters)" value={newPassword} onChange={e=>setNewPassword(e.target.value)} style={{padding:'12px 16px',border:'1px solid #e2e8f0',borderRadius:'10px',fontSize:'14px',outline:'none',fontFamily:'inherit'}}/>
+            <button onClick={handleChangePassword} disabled={loading} style={{padding:'13px',background:'#0ea5e9',color:'#fff',border:'none',borderRadius:'10px',fontWeight:'700',fontSize:'14px',cursor:'pointer',opacity:loading?0.6:1}}>{loading ? 'Updating...' : 'Update Password'}</button>
           </div>
         )}
 
         {tab === 'profile' && (
           <div style={{flex:1,padding:'20px',display:'flex',flexDirection:'column',gap:'16px'}}>
-            <button onClick={()=>setTab('main')} style={{display:'flex',alignItems:'center',gap:'8px',background:'none',border:'none',color:'#0ea5e9',fontSize:'14px',cursor:'pointer',padding:0,fontWeight:'600'}}>← Geri</button>
-            <h3 style={{fontSize:'18px',fontWeight:'700',color:'#0f172a'}}>Bilgileri Değiştir</h3>
-            <div style={{fontSize:'13px',color:'#64748b'}}>E-posta: <strong>{session.user.email}</strong></div>
-            <input type="text" placeholder="Kullanıcı adı" value={newName} onChange={e=>setNewName(e.target.value)} style={{padding:'12px 16px',border:'1px solid #e2e8f0',borderRadius:'10px',fontSize:'14px',outline:'none',fontFamily:'inherit'}}/>
-            <button onClick={handleChangeProfile} disabled={loading} style={{padding:'13px',background:'#0ea5e9',color:'#fff',border:'none',borderRadius:'10px',fontWeight:'700',fontSize:'14px',cursor:'pointer',opacity:loading?0.6:1}}>{loading ? 'Güncelleniyor...' : 'Profili Güncelle'}</button>
+            <button onClick={()=>setTab('main')} style={{display:'flex',alignItems:'center',gap:'8px',background:'none',border:'none',color:'#0ea5e9',fontSize:'14px',cursor:'pointer',padding:0,fontWeight:'600'}}>← Back</button>
+            <h3 style={{fontSize:'18px',fontWeight:'700',color:'#0f172a'}}>Edit Info</h3>
+            <div style={{fontSize:'13px',color:'#64748b'}}>Email: <strong>{session.user.email}</strong></div>
+            <input type="text" placeholder="Username" value={newName} onChange={e=>setNewName(e.target.value)} style={{padding:'12px 16px',border:'1px solid #e2e8f0',borderRadius:'10px',fontSize:'14px',outline:'none',fontFamily:'inherit'}}/>
+            <button onClick={handleChangeProfile} disabled={loading} style={{padding:'13px',background:'#0ea5e9',color:'#fff',border:'none',borderRadius:'10px',fontWeight:'700',fontSize:'14px',cursor:'pointer',opacity:loading?0.6:1}}>{loading ? 'Updating...' : 'Update Profile'}</button>
           </div>
         )}
       </div>
@@ -275,19 +275,19 @@ function ArtistPicker({onSelect,onBack}) {
   return (
     <div className="picker-page">
       <div className="picker-topbar">
-        <button className="picker-back" onClick={onBack}>← Geri</button>
-        <h2>Sanatçı Seç</h2>
-        <span className="picker-cnt">{list.length} sanatçı</span>
+        <button className="picker-back" onClick={onBack}>← Back</button>
+        <h2>Choose Artist</h2>
+        <span className="picker-cnt">{list.length} artists</span>
       </div>
       <div className="picker-search">
         <span>🔍</span>
-        <input autoFocus placeholder="Sanatçı ara..." value={q} onChange={e=>setQ(e.target.value)}/>
+        <input autoFocus placeholder="Search artist..." value={q} onChange={e=>setQ(e.target.value)}/>
       </div>
       <div className="picker-grid">
         {list.map(p=>(
           <button key={p} className="picker-card" onClick={()=>onSelect(p)}>
             <span className="picker-avatar">{p==='manuel'?'⚙️':'🎤'}</span>
-            <span className="picker-name">{p==='manuel'?'Manuel (Efektsiz)':fmt(p)}</span>
+            <span className="picker-name">{p==='manuel'?'Manual (No Effects)':fmt(p)}</span>
           </button>
         ))}
       </div>
@@ -296,14 +296,14 @@ function ArtistPicker({onSelect,onBack}) {
 }
 
 const STYLE_PRESETS = [
-  {id:'natural',   name:'Natural',     emoji:'🌿', desc:'Doğal ve şeffaf'},
-  {id:'warm',      name:'Warm',        emoji:'☀️', desc:'Sıcak ve dolgun'},
-  {id:'punchy',    name:'Punchy',      emoji:'👊', desc:'Vurucu ve dinamik'},
-  {id:'balanced',  name:'Balanced',    emoji:'⚖️', desc:'Dengeli ve temiz'},
-  {id:'bright',    name:'Bright',      emoji:'💎', desc:'Parlak ve berrak'},
-  {id:'deep',      name:'Deep',        emoji:'🌊', desc:'Derin ve geniş'},
-  {id:'cinematic', name:'Cinematic',   emoji:'🎬', desc:'Sinematik ve epik'},
-  {id:'loud',      name:'Loud',        emoji:'🔊', desc:'Güçlü ve baskın'},
+  {id:'natural',   name:'Natural',     emoji:'🌿', desc:'Natural and clear'},
+  {id:'warm',      name:'Warm',        emoji:'☀️', desc:'Warm and full'},
+  {id:'punchy',    name:'Punchy',      emoji:'👊', desc:'Punchy and dynamic'},
+  {id:'balanced',  name:'Balanced',    emoji:'⚖️', desc:'Balanced and clean'},
+  {id:'bright',    name:'Bright',      emoji:'💎', desc:'Bright and crisp'},
+  {id:'deep',      name:'Deep',        emoji:'🌊', desc:'Deep and wide'},
+  {id:'cinematic', name:'Cinematic',   emoji:'🎬', desc:'Cinematic and epic'},
+  {id:'loud',      name:'Loud',        emoji:'🔊', desc:'Strong and dominant'},
 ]
 const STYLE_MULT = {
   natural:{reverb:0.8,bass:0.5,treble:0.5},
@@ -315,7 +315,7 @@ const STYLE_MULT = {
   cinematic:{reverb:1.8,bass:1.1,treble:1.2},
   loud:   {reverb:0.8,bass:1.5,treble:1.5},
 }
-const INTENSITY_STEPS = ['Hafif','Orta','Normal','Güçlü','Yoğun']
+const INTENSITY_STEPS = ['Light','Medium','Normal','Strong','Intense']
 const INTENSITY_VALS  = [0.4, 0.7, 1.0, 1.35, 1.8]
 
 function MasterPresetPanel({track, onApply, onClose}) {
@@ -333,7 +333,7 @@ function MasterPresetPanel({track, onApply, onClose}) {
   }
 
   const apply = () => {
-    if (!style) { toast('Bir ses stili seçin'); return }
+    if (!style) { toast('Select a sound style'); return }
     const base = artistPreset || {eqBass:2,eqMid:0,eqTreble:2,reverb:25,autotune:30}
     const iv = INTENSITY_VALS[intensity]
     const sm = STYLE_MULT[style.id]
@@ -345,7 +345,7 @@ function MasterPresetPanel({track, onApply, onClose}) {
       autotune: Math.round(base.autotune * iv),
       volume:   inputGain,
     })
-    toast.success(`${style.name} — ${INTENSITY_STEPS[intensity]} uygulandı! ✨`)
+    toast.success(`${style.name} — ${INTENSITY_STEPS[intensity]} applied! ✨`)
   }
 
   const thumbPct = (intensity / 4) * 100
@@ -364,14 +364,14 @@ function MasterPresetPanel({track, onApply, onClose}) {
           <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'12px'}}>
             <span style={{fontWeight:'700',fontSize:'13px',color:'#334155'}}>Input Gain</span>
             <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
-              <button onClick={()=>setInputGain(100)} style={{fontSize:'12px',fontWeight:'700',color:'#0ea5e9',background:'#eff6ff',border:'none',borderRadius:'20px',padding:'4px 12px',cursor:'pointer'}}>Otomatik</button>
+              <button onClick={()=>setInputGain(100)} style={{fontSize:'12px',fontWeight:'700',color:'#0ea5e9',background:'#eff6ff',border:'none',borderRadius:'20px',padding:'4px 12px',cursor:'pointer'}}>Auto</button>
               <span style={{fontSize:'13px',fontWeight:'800',color:'#0f172a',minWidth:'40px',textAlign:'right'}}>{inputGain}%</span>
             </div>
           </div>
           <input type="range" min={0} max={200} value={inputGain} onChange={e=>setInputGain(+e.target.value)} style={{width:'100%',accentColor:'#0ea5e9',height:'6px',cursor:'pointer'}}/>
         </div>
         <div style={{padding:'18px 24px',borderBottom:'1px solid #f1f5f9'}}>
-          <div style={{fontWeight:'700',fontSize:'13px',color:'#334155',marginBottom:'14px'}}>Ses Stili</div>
+          <div style={{fontWeight:'700',fontSize:'13px',color:'#334155',marginBottom:'14px'}}>Sound Style</div>
           <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'8px'}}>
             {STYLE_PRESETS.map(p=>(
               <button key={p.id} onClick={()=>setStyle(p)} style={{padding:'14px 8px',borderRadius:'14px',border:'2px solid',cursor:'pointer',background:style?.id===p.id?'linear-gradient(135deg,#0ea5e9,#38bdf8)':'#f8fafc',borderColor:style?.id===p.id?'#0ea5e9':'#e2e8f0',display:'flex',flexDirection:'column',alignItems:'center',gap:'6px',boxShadow:style?.id===p.id?'0 4px 16px rgba(14,165,233,0.35)':'none',transform:style?.id===p.id?'scale(1.03)':'scale(1)',transition:'all 0.18s'}}>
@@ -384,7 +384,7 @@ function MasterPresetPanel({track, onApply, onClose}) {
         </div>
         <div style={{padding:'18px 24px 20px',borderBottom:'1px solid #f1f5f9'}}>
           <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'20px'}}>
-            <span style={{fontWeight:'700',fontSize:'13px',color:'#334155'}}>Yoğunluk</span>
+            <span style={{fontWeight:'700',fontSize:'13px',color:'#334155'}}>Intensity</span>
             <span style={{fontSize:'13px',fontWeight:'800',color:'#0ea5e9'}}>{INTENSITY_STEPS[intensity]}</span>
           </div>
           <div style={{position:'relative',height:'28px',display:'flex',alignItems:'center',cursor:'pointer'}} ref={trackRef} onClick={handleTrackClick}>
@@ -403,8 +403,8 @@ function MasterPresetPanel({track, onApply, onClose}) {
           </div>
         </div>
         <div style={{padding:'18px 24px',display:'flex',gap:'12px'}}>
-          <button onClick={onClose} style={{flex:1,padding:'14px',background:'#f1f5f9',border:'none',borderRadius:'12px',fontWeight:'600',fontSize:'14px',color:'#64748b',cursor:'pointer'}}>İptal</button>
-          <button onClick={apply} style={{flex:2,padding:'14px',border:'none',borderRadius:'12px',fontWeight:'800',fontSize:'15px',color:'#fff',cursor:style?'pointer':'not-allowed',background:style?'linear-gradient(135deg,#0ea5e9,#38bdf8)':'#cbd5e1',boxShadow:style?'0 4px 20px rgba(14,165,233,0.4)':'none',transition:'all 0.2s'}}>{style ? `${style.emoji} Uygula` : 'Önce Stil Seç'}</button>
+          <button onClick={onClose} style={{flex:1,padding:'14px',background:'#f1f5f9',border:'none',borderRadius:'12px',fontWeight:'600',fontSize:'14px',color:'#64748b',cursor:'pointer'}}>Cancel</button>
+          <button onClick={apply} style={{flex:2,padding:'14px',border:'none',borderRadius:'12px',fontWeight:'800',fontSize:'15px',color:'#fff',cursor:style?'pointer':'not-allowed',background:style?'linear-gradient(135deg,#0ea5e9,#38bdf8)':'#cbd5e1',boxShadow:style?'0 4px 20px rgba(14,165,233,0.4)':'none',transition:'all 0.2s'}}>{style ? `${style.emoji} Apply` : 'Choose Style First'}</button>
         </div>
       </div>
     </div>
@@ -425,7 +425,7 @@ function FxDrawer({track, onChange, onClose}) {
   return (
     <div className="fx-drawer">
       <div className="fx-header">
-        <span>🎛 {isBeat ? '🥁 Beat' : '🎤 Vokal'} — {track.name} FX</span>
+        <span>🎛 {isBeat ? '🥁 Beat' : '🎤 Vocal'} — {track.name} FX</span>
         <button onClick={onClose}>✕</button>
       </div>
       {!isBeat && sl('Reverb','reverb',0,100)}
@@ -442,7 +442,7 @@ function AutotuneDrawer({track, onChange, onClose}) {
   if(!track) return null
   const s = track.fx || {}
   const root = s.atRoot || 'C'
-  const scale = s.atScale || 'Kromatik'
+  const scale = s.atScale || 'Chromatic'
   return (
     <div className="fx-drawer">
       <div className="fx-header">
@@ -450,12 +450,12 @@ function AutotuneDrawer({track, onChange, onClose}) {
         <button onClick={onClose}>✕</button>
       </div>
       <div className="fx-row">
-        <span className="fx-label">Yoğunluk</span>
+        <span className="fx-label">Intensity</span>
         <input type="range" min={0} max={100} value={s.autotune??60} onChange={e=>onChange('autotune',+e.target.value)}/>
         <span className="fx-val">{s.autotune??60}%</span>
       </div>
       <div style={{marginTop:'14px',marginBottom:'8px'}}>
-        <div style={{fontSize:'12px',fontWeight:'700',color:'var(--text-secondary)',marginBottom:'8px',textTransform:'uppercase',letterSpacing:'0.8px'}}>Kök Nota (Root)</div>
+        <div style={{fontSize:'12px',fontWeight:'700',color:'var(--text-secondary)',marginBottom:'8px',textTransform:'uppercase',letterSpacing:'0.8px'}}>Root Note</div>
         <div style={{display:'grid',gridTemplateColumns:'repeat(6,1fr)',gap:'5px'}}>
           {ROOTS.map(r=>(
             <button key={r} onClick={()=>onChange('atRoot',r)} style={{padding:'6px 4px',borderRadius:'8px',border:'1px solid',fontSize:'12px',fontWeight:'600',cursor:'pointer',background:root===r?'#0ea5e9':'var(--bg-glass)',borderColor:root===r?'#0ea5e9':'var(--border)',color:root===r?'#fff':'var(--text-primary)',transition:'all 0.15s'}}>{r}</button>
@@ -463,12 +463,12 @@ function AutotuneDrawer({track, onChange, onClose}) {
         </div>
       </div>
       <div style={{marginTop:'14px'}}>
-        <div style={{fontSize:'12px',fontWeight:'700',color:'var(--text-secondary)',marginBottom:'8px',textTransform:'uppercase',letterSpacing:'0.8px'}}>Gam / Tonalite</div>
+        <div style={{fontSize:'12px',fontWeight:'700',color:'var(--text-secondary)',marginBottom:'8px',textTransform:'uppercase',letterSpacing:'0.8px'}}>Scale / Key</div>
         <div style={{display:'flex',flexDirection:'column',gap:'5px'}}>
           {SCALES.map(sc=>(
             <button key={sc} onClick={()=>onChange('atScale',sc)} style={{padding:'8px 14px',borderRadius:'8px',border:'1px solid',fontSize:'13px',fontWeight:'500',cursor:'pointer',textAlign:'left',background:scale===sc?'#0ea5e9':'var(--bg-glass)',borderColor:scale===sc?'#0ea5e9':'var(--border)',color:scale===sc?'#fff':'var(--text-primary)',transition:'all 0.15s'}}>
               {scale===sc ? '✓ ' : ''}{sc}
-              {sc==='Kromatik' ? <span style={{fontSize:'10px',opacity:0.7}}> — Tüm notalar</span> : null}
+              {sc==='Chromatic' ? <span style={{fontSize:'10px',opacity:0.7}}> — All notes</span> : null}
             </button>
           ))}
         </div>
@@ -576,10 +576,10 @@ export default function StudioPage({session}) {
           }
           if (loadedAny) {
             setBuffers(prev => ({...prev, ...newBuffers}))
-            toast.success('Önceki proje geri yüklendi!', {position:'bottom-center'})
+            toast.success('Previous project restored!', {position:'bottom-center'})
           }
         }
-      } catch(err) { console.error('Proje geri yüklenemedi:', err) }
+      } catch(err) { console.error('Failed to restore project:', err) }
     }
     loadProject()
   }, [])
@@ -751,15 +751,15 @@ export default function StudioPage({session}) {
       if((e.ctrlKey || e.metaKey) && e.key === 'c') {
         setClips(p => {
           const clip = p.find(c => c.id === selectedClipIdRef.current)
-          if(clip) { setClipboardClip(clip); toast('Klip kopyalandı 📋') }
+          if(clip) { setClipboardClip(clip); toast('Clip copied 📋') }
           return p
         })
       }
       if((e.ctrlKey || e.metaKey) && e.key === 'v') {
         if(clipboardClipRef.current && activeTrackId) {
           setClips(p => { saveHistory(p); return [...p, {...clipboardClipRef.current, id: uid(), trackId: activeTrackId, startTime: positionRef.current}] })
-          toast('Klip yapıştırıldı 📎')
-        } else if(!activeTrackId) { toast('Yapıştırmak için bir track seçin') }
+          toast('Clip pasted 📎')
+        } else if(!activeTrackId) { toast('Select a track to paste into') }
       }
     }
     window.addEventListener('keydown', onKey)
@@ -767,7 +767,7 @@ export default function StudioPage({session}) {
   }, [activeTrackId, stopAll])
 
   const handleRecord=async()=>{
-    if (!activeTrackId) { toast.error("Lütfen önce bir track seçin veya '+ Vokal Ekle' ile oluşturun."); return }
+    if (!activeTrackId) { toast.error("Please select a track first, or create one with '+ Add Vocal'."); return }
     stopAll()
     const ctx=getCtx()
     playAllFresh(positionRef.current)
@@ -804,21 +804,21 @@ export default function StudioPage({session}) {
             const bufferId = uid()
             await set(`audio_${bufferId}`, blob)
             setBuffers(prev => ({...prev, [bufferId]: buf}))
-            setClips(prev => { saveHistory(prev); return [...prev, {id: uid(), trackId: activeTrackId, bufferId, startTime: recStartTime, offset: 0, duration: buf.duration, name: 'Kayıt'}] })
-            toast.success('Kayıt tamamlandı 🎤')
+            setClips(prev => { saveHistory(prev); return [...prev, {id: uid(), trackId: activeTrackId, bufferId, startTime: recStartTime, offset: 0, duration: buf.duration, name: 'Recording'}] })
+            toast.success('Recording complete 🎤')
           }
-        } catch(err) { console.error('Kayıt işleme hatası:', err); toast.error('Kayıt işlenemedi. Tarayıcı formatı desteklemiyor olabilir.') }
+        } catch(err) { console.error('Recording processing error:', err); toast.error('Could not process recording. The browser format may not be supported.') }
       }
       mr.start()
       mediaRecRef.current=mr
-    } catch(err) { toast.error('Mikrofon erişimi reddedildi.'); setIsRecording(false); stopAll() }
+    } catch(err) { toast.error('Microphone access denied.'); setIsRecording(false); stopAll() }
   }
 
   const handleStop=()=>{ stopAll(); positionRef.current=0; setPosition(0) }
 
   const handleExport=async()=>{
-    if (clips.length === 0) { toast.error('Dışa aktarılacak ses bulunamadı.'); return }
-    const toastId = toast.loading('Sesler birleştiriliyor...')
+    if (clips.length === 0) { toast.error('No audio found to export.'); return }
+    const toastId = toast.loading('Mixing audio...')
     try {
       const maxTime = clips.reduce((m, c) => Math.max(m, c.startTime + c.duration), 0)
       const dur = maxTime > 0 ? maxTime : 30
@@ -849,14 +849,14 @@ export default function StudioPage({session}) {
       const wavBlob = audioBufferToWav(renderedBuffer)
       const url = URL.createObjectURL(wavBlob)
       const a = document.createElement('a'); a.href = url; a.download = 'tunecraft_export.wav'; a.click()
-      toast.success('Dışa aktarma tamamlandı! 💾', {id: toastId})
-    } catch(err) { console.error(err); toast.error('Dışa aktarma sırasında hata oluştu.', {id: toastId}) }
+      toast.success('Export complete! 💾', {id: toastId})
+    } catch(err) { console.error(err); toast.error('An error occurred during export.', {id: toastId}) }
   }
 
   const handleBeatUpload=async(e)=>{
     const target = e.target; const file = target.files[0]; target.value = ''
     if(!file) return
-    const toastId = toast.loading('Beat yükleniyor...')
+    const toastId = toast.loading('Uploading beat...')
     try {
       const buf=await decode(file)
       const bufferId = uid()
@@ -866,35 +866,35 @@ export default function StudioPage({session}) {
       setTracks(prev => [...prev, {id: trackId, type: 'beat', name: file.name, preset: null, fx: {...DEF_FX}}])
       setClips(prev => { saveHistory(prev); return [...prev, {id: uid(), trackId, bufferId, startTime: 0, offset: 0, duration: buf.duration, name: file.name}] })
       setActiveTrackId(trackId)
-      toast.success(`Beat eklendi 🥁`, {id: toastId})
-    } catch(err) { console.error(err); toast.error('Beat okunamadı, format desteklenmiyor olabilir', {id: toastId}) }
+      toast.success(`Beat added 🥁`, {id: toastId})
+    } catch(err) { console.error(err); toast.error('Could not read beat, format may not be supported', {id: toastId}) }
   }
 
   const handleVocalUpload=async(e, trackId)=>{
     const target = e.target; const file = target.files[0]; target.value = ''
     if(!file) return
-    const toastId = toast.loading('Ses dosyası yükleniyor...')
+    const toastId = toast.loading('Uploading audio file...')
     try {
       const buf=await decode(file)
       const bufferId = uid()
       await set(`audio_${bufferId}`, file)
       setBuffers(prev => ({...prev, [bufferId]: buf}))
       setClips(prev => { saveHistory(prev); return [...prev, {id: uid(), trackId, bufferId, startTime: positionRef.current, offset: 0, duration: buf.duration, name: file.name}] })
-      toast.success(`Ses eklendi 🎤`, {id: toastId})
-    } catch(err) { console.error(err); toast.error('Ses okunamadı, format desteklenmiyor olabilir', {id: toastId}) }
+      toast.success(`Audio added 🎤`, {id: toastId})
+    } catch(err) { console.error(err); toast.error('Could not read audio, format may not be supported', {id: toastId}) }
   }
 
   const handleArtistSelect=(preset)=>{
     if (editTrackId) {
-      setTracks(p => p.map(t => t.id === editTrackId ? {...t, preset, name: `Vokal (${fmt(preset)})`} : t))
+      setTracks(p => p.map(t => t.id === editTrackId ? {...t, preset, name: `Vocal (${fmt(preset)})`} : t))
       setEditTrackId(null)
     } else {
       const trackId = uid()
-      setTracks(prev => [...prev, {id: trackId, type: 'vocal', preset, name: `Vokal (${fmt(preset)})`, fx: {...DEF_FX}}])
+      setTracks(prev => [...prev, {id: trackId, type: 'vocal', preset, name: `Vocal (${fmt(preset)})`, fx: {...DEF_FX}}])
       setActiveTrackId(trackId)
     }
     setView('studio')
-    toast.success(`${fmt(preset)} seçildi! 🎤`)
+    toast.success(`${fmt(preset)} selected! 🎤`)
   }
 
   const sortedTracks = [...tracks].sort((a, b) => {
@@ -974,10 +974,10 @@ export default function StudioPage({session}) {
   const maxTime = clips.reduce((m, c) => Math.max(m, c.startTime + c.duration), 0)
   const duration = maxTime > position ? maxTime + 5 : position + 5
 
-  const handleLogout=async()=>{ await clear(); await supabase.auth.signOut(); toast('Çıkış yapıldı') }
+  const handleLogout=async()=>{ await clear(); await supabase.auth.signOut(); toast('Logged out') }
   const handleAddVocal = () => {
     const trackId = uid()
-    setTracks(prev => [...prev, {id: trackId, type: 'vocal', preset: 'manuel', name: `Vokal (Manuel (Efektsiz))`, fx: {...DEF_FX}}])
+    setTracks(prev => [...prev, {id: trackId, type: 'vocal', preset: 'manuel', name: `Vocal (Manual (No Effects))`, fx: {...DEF_FX}}])
     setActiveTrackId(trackId)
   }
 
@@ -992,10 +992,10 @@ export default function StudioPage({session}) {
         <span className="daw-brand">🎵 Tunecraft</span>
         <div className="daw-nav-right">
           {!isSubscribed&&(
-            <button onClick={()=>setShowSubModal(true)} style={{background:'linear-gradient(135deg,#0ea5e9,#38bdf8)',color:'#fff',border:'none',borderRadius:'8px',padding:'6px 14px',fontSize:'13px',fontWeight:'700',cursor:'pointer',boxShadow:'0 2px 8px rgba(14,165,233,0.35)'}}>⭐ Üye Ol</button>
+            <button onClick={()=>setShowSubModal(true)} style={{background:'linear-gradient(135deg,#0ea5e9,#38bdf8)',color:'#fff',border:'none',borderRadius:'8px',padding:'6px 14px',fontSize:'13px',fontWeight:'700',cursor:'pointer',boxShadow:'0 2px 8px rgba(14,165,233,0.35)'}}>⭐ Subscribe</button>
           )}
           <div>
-            <button onClick={e=>{e.stopPropagation();setMenuOpen(!menuOpen)}} style={{background:'var(--bg-glass)',border:'1px solid var(--border)',borderRadius:'8px',padding:'8px 10px',cursor:'pointer',display:'flex',flexDirection:'column',gap:'4px',alignItems:'center',justifyContent:'center',width:'38px',height:'38px'}} title="Menü">
+            <button onClick={e=>{e.stopPropagation();setMenuOpen(!menuOpen)}} style={{background:'var(--bg-glass)',border:'1px solid var(--border)',borderRadius:'8px',padding:'8px 10px',cursor:'pointer',display:'flex',flexDirection:'column',gap:'4px',alignItems:'center',justifyContent:'center',width:'38px',height:'38px'}} title="Menu">
               <span style={{display:'block',width:'16px',height:'2px',background:'var(--text-primary)',borderRadius:'2px'}}></span>
               <span style={{display:'block',width:'16px',height:'2px',background:'var(--text-primary)',borderRadius:'2px'}}></span>
               <span style={{display:'block',width:'16px',height:'2px',background:'var(--text-primary)',borderRadius:'2px'}}></span>
@@ -1007,33 +1007,33 @@ export default function StudioPage({session}) {
       {menuOpen && (
         <div onClick={e=>e.stopPropagation()} style={{position:'fixed',top:'60px',right:'16px',backgroundColor:'#ffffff',border:'1px solid #e2e8f0',borderRadius:'14px',boxShadow:'0 12px 40px rgba(0,0,0,0.22)',minWidth:'210px',zIndex:9999,overflow:'hidden'}}>
           <div style={{padding:'12px 16px',borderBottom:'1px solid #e2e8f0',fontSize:'12px',color:'#64748b',fontWeight:'600',backgroundColor:'#f8fafc'}}>{session.user.user_metadata?.username || session.user.email}</div>
-          {!isSubscribed && <button onClick={()=>{setMenuOpen(false);setShowSubModal(true)}} style={{display:'flex',alignItems:'center',gap:'10px',width:'100%',padding:'12px 16px',backgroundColor:'#eff6ff',border:'none',borderBottom:'1px solid #e2e8f0',cursor:'pointer',fontSize:'14px',fontWeight:'700',color:'#0ea5e9'}}>⭐ Üye Ol</button>}
-          <button onClick={()=>{setMenuOpen(false);setShowAccountDrawer(true)}} style={{display:'flex',alignItems:'center',gap:'10px',width:'100%',padding:'12px 16px',backgroundColor:'#ffffff',border:'none',borderBottom:'1px solid #e2e8f0',cursor:'pointer',fontSize:'14px',color:'#0f172a'}}>⚙️ Hesap Ayarları</button>
-          <button onClick={()=>{setMenuOpen(false);handleLogout()}} style={{display:'flex',alignItems:'center',gap:'10px',width:'100%',padding:'12px 16px',backgroundColor:'#fff1f2',border:'none',cursor:'pointer',fontSize:'14px',color:'#ef4444',fontWeight:'600'}}>🚪 Çıkış Yap</button>
+          {!isSubscribed && <button onClick={()=>{setMenuOpen(false);setShowSubModal(true)}} style={{display:'flex',alignItems:'center',gap:'10px',width:'100%',padding:'12px 16px',backgroundColor:'#eff6ff',border:'none',borderBottom:'1px solid #e2e8f0',cursor:'pointer',fontSize:'14px',fontWeight:'700',color:'#0ea5e9'}}>⭐ Subscribe</button>}
+          <button onClick={()=>{setMenuOpen(false);setShowAccountDrawer(true)}} style={{display:'flex',alignItems:'center',gap:'10px',width:'100%',padding:'12px 16px',backgroundColor:'#ffffff',border:'none',borderBottom:'1px solid #e2e8f0',cursor:'pointer',fontSize:'14px',color:'#0f172a'}}>⚙️ Account Settings</button>
+          <button onClick={()=>{setMenuOpen(false);handleLogout()}} style={{display:'flex',alignItems:'center',gap:'10px',width:'100%',padding:'12px 16px',backgroundColor:'#fff1f2',border:'none',cursor:'pointer',fontSize:'14px',color:'#ef4444',fontWeight:'600'}}>🚪 Log Out</button>
         </div>
       )}
 
       <div className="transport">
         <div className="transport-left">
-          <button className={`t-btn rec-btn ${isRecording?'active':''}`} onClick={isRecording?handleStop:handleRecord} title="Kayıt">🔴</button>
+          <button className={`t-btn rec-btn ${isRecording?'active':''}`} onClick={isRecording?handleStop:handleRecord} title="Record">🔴</button>
           <button className={`t-btn play-btn ${isPlaying?'active':''}`} onClick={async()=>{
             if(isPlaying) handleStop()
             else { const ctx=getCtx(); if(ctx.state==='suspended') await ctx.resume(); await new Promise(r=>setTimeout(r,50)); playAllFresh() }
-          }} title="Oynat">{isPlaying?'⏸':'▶'}</button>
-          <button className="t-btn" onClick={handleStop} title="Durdur">⏹</button>
-          
+          }} title="Play">{isPlaying?'⏸':'▶'}</button>
+          <button className="t-btn" onClick={handleStop} title="Stop">⏹</button>
+
           <div className="tool-selector" style={{marginLeft:'20px',display:'flex',gap:'5px',alignItems:'center'}}>
-            <button className={`t-btn ${tool==='select'?'active':''}`} onClick={()=>setTool('select')} title="Seçme / Taşıma">🖱</button>
-            <button className={`t-btn ${tool==='cut'?'active':''}`} onClick={()=>setTool('cut')} title="Kesme">✂️</button>
+            <button className={`t-btn ${tool==='select'?'active':''}`} onClick={()=>setTool('select')} title="Select / Move">🖱</button>
+            <button className={`t-btn ${tool==='cut'?'active':''}`} onClick={()=>setTool('cut')} title="Cut">✂️</button>
             <div style={{width:'1px',height:'20px',background:'var(--border)',margin:'0 5px'}}></div>
-            <button className="t-btn" onClick={handleUndo} title="Geri Al (Ctrl+Z)" style={{fontSize:'12px'}}>↩️</button>
-            <button className="t-btn" onClick={handleRedo} title="İleri Al (Ctrl+Y)" style={{fontSize:'12px'}}>↪️</button>
+            <button className="t-btn" onClick={handleUndo} title="Undo (Ctrl+Z)" style={{fontSize:'12px'}}>↩️</button>
+            <button className="t-btn" onClick={handleRedo} title="Redo (Ctrl+Y)" style={{fontSize:'12px'}}>↪️</button>
             <div style={{width:'1px',height:'20px',background:'var(--border)',margin:'0 5px'}}></div>
-            <button className={`t-btn ${isMonitoring?'active':''}`} onClick={()=>setIsMonitoring(!isMonitoring)} title="Canlı Dinleme">🎧</button>
-            <button className={`t-btn ${metronome?'active':''}`} onClick={()=>setMetronome(!metronome)} title="Metronom Aç/Kapat" style={{fontSize:'14px'}}>⏱️</button>
+            <button className={`t-btn ${isMonitoring?'active':''}`} onClick={()=>setIsMonitoring(!isMonitoring)} title="Live Monitoring">🎧</button>
+            <button className={`t-btn ${metronome?'active':''}`} onClick={()=>setMetronome(!metronome)} title="Toggle Metronome" style={{fontSize:'14px'}}>⏱️</button>
             <input type="number" min={40} max={240} value={bpm} onChange={e=>{const v=Math.min(240,Math.max(40,Number(e.target.value)));setBpm(v);bpmRef.current=v}} style={{width:'46px',background:'var(--bg-glass)',border:'1px solid var(--border)',color:'var(--text-primary)',borderRadius:'4px',padding:'4px',fontSize:'12px',textAlign:'center'}} title="BPM"/>
             <div style={{display:'flex',alignItems:'center',gap:'8px',fontSize:'14px',fontWeight:'700',fontFamily:'"Courier New", monospace',background:'var(--bg-glass)',padding:'4px 10px',borderRadius:'6px',border:'1px solid var(--border)',color:'var(--text-primary)',marginLeft:'10px'}}>
-              {isRecording && <span style={{color:'var(--error)',animation:'recPulse 0.8s infinite'}}>● KAYIT</span>}
+              {isRecording && <span style={{color:'var(--error)',animation:'recPulse 0.8s infinite'}}>● REC</span>}
               <span>{fmtTime(position)}</span>
             </div>
           </div>
@@ -1049,7 +1049,7 @@ export default function StudioPage({session}) {
             <input type="range" min="0" max="300" value={masterVolume} onChange={e=>{const v=Number(e.target.value);setMasterVolume(v);if(masterGainRef.current)masterGainRef.current.gain.value=v/100}} style={{width:'70px',height:'4px',accentColor:'var(--primary)'}}/>
             <span style={{fontSize:'9px',minWidth:'28px'}}>{masterVolume}%</span>
           </div>
-          <button className="t-btn" onClick={handleExport} title="Şarkıyı İndir">💾 İndir</button>
+          <button className="t-btn" onClick={handleExport} title="Download Track">💾 Download</button>
         </div>
       </div>
 
@@ -1067,7 +1067,7 @@ export default function StudioPage({session}) {
               <div style={{display:'flex',flexDirection:'column',gap:'4px'}}>
                 {track.type === 'vocal' && (
                   <label style={{background:'transparent',border:'1px solid rgba(255,255,255,0.2)',color:'var(--text-primary)',borderRadius:'4px',padding:'2px 6px',fontSize:'10px',cursor:'pointer',textAlign:'center'}} onClick={e=>e.stopPropagation()}>
-                    +Ses<input type="file" accept="audio/*" style={{display:'none'}} onChange={(e)=>handleVocalUpload(e,track.id)}/>
+                    +Audio<input type="file" accept="audio/*" style={{display:'none'}} onChange={(e)=>handleVocalUpload(e,track.id)}/>
                   </label>
                 )}
                 <button style={{background:'transparent',border:'none',color:'var(--text-muted)',cursor:'pointer',fontSize:'12px'}} onClick={(e)=>{e.stopPropagation();deleteTrack(track.id)}}>✕</button>
@@ -1075,7 +1075,7 @@ export default function StudioPage({session}) {
             </div>
           ))}
           <div style={{padding:'10px',display:'flex',gap:'10px',borderBottom:'1px solid rgba(255,255,255,0.05)'}}>
-            <button onClick={handleAddVocal} style={{flex:1,background:'var(--bg-glass)',border:'none',color:'var(--text-primary)',padding:'8px',borderRadius:'4px',cursor:'pointer',fontSize:'12px'}}>+ Vokal</button>
+            <button onClick={handleAddVocal} style={{flex:1,background:'var(--bg-glass)',border:'none',color:'var(--text-primary)',padding:'8px',borderRadius:'4px',cursor:'pointer',fontSize:'12px'}}>+ Vocal</button>
             <label style={{flex:1,background:'var(--bg-glass)',border:'none',color:'var(--text-primary)',padding:'8px',borderRadius:'4px',cursor:'pointer',fontSize:'12px',textAlign:'center'}}>
               + Beat<input type="file" accept="audio/*" style={{display:'none'}} onChange={handleBeatUpload}/>
             </label>
@@ -1112,7 +1112,7 @@ export default function StudioPage({session}) {
               </div>
             ))}
             {tracks.length === 0 && (
-              <div style={{padding:'20px',color:'rgba(255,255,255,0.3)',textAlign:'center',pointerEvents:'none'}}>Proje boş. Soldan + Beat veya + Vokal ekleyerek başlayın.</div>
+              <div style={{padding:'20px',color:'rgba(255,255,255,0.3)',textAlign:'center',pointerEvents:'none'}}>Project is empty. Start by adding + Beat or + Vocal from the left.</div>
             )}
           </div>
         </div>
@@ -1121,7 +1121,7 @@ export default function StudioPage({session}) {
       {fxOpen&&(
         <div className="fx-overlay" onClick={()=>setFxOpen(false)}>
           <div className="fx-panel" onClick={e=>e.stopPropagation()}>
-            {fxTrack ? <FxDrawer track={fxTrack} onChange={(k,v)=>updateFx(activeTrackId,k,v)} onClose={()=>setFxOpen(false)}/> : <div className="fx-empty"><p>Bir track seç</p><button onClick={()=>setFxOpen(false)}>Kapat</button></div>}
+            {fxTrack ? <FxDrawer track={fxTrack} onChange={(k,v)=>updateFx(activeTrackId,k,v)} onClose={()=>setFxOpen(false)}/> : <div className="fx-empty"><p>Select a track</p><button onClick={()=>setFxOpen(false)}>Close</button></div>}
           </div>
         </div>
       )}
@@ -1129,16 +1129,16 @@ export default function StudioPage({session}) {
       {autotuneOpen&&(
         <div className="fx-overlay" onClick={()=>setAutotuneOpen(false)}>
           <div className="fx-panel" onClick={e=>e.stopPropagation()}>
-            {fxTrack ? <AutotuneDrawer track={fxTrack} onChange={(k,v)=>updateFx(activeTrackId,k,v)} onClose={()=>setAutotuneOpen(false)}/> : <div className="fx-empty"><p>Bir track seç</p><button onClick={()=>setAutotuneOpen(false)}>Kapat</button></div>}
+            {fxTrack ? <AutotuneDrawer track={fxTrack} onChange={(k,v)=>updateFx(activeTrackId,k,v)} onClose={()=>setAutotuneOpen(false)}/> : <div className="fx-empty"><p>Select a track</p><button onClick={()=>setAutotuneOpen(false)}>Close</button></div>}
           </div>
         </div>
       )}
 
       {masterPanelOpen && (
         <MasterPresetPanel
-          track={fxTrack || {name:'Vokal Track',preset:'',fx:{}}}
+          track={fxTrack || {name:'Vocal Track',preset:'',fx:{}}}
           onApply={(fxVals)=>{
-            if(activeTrackId) { setTracks(p=>p.map(t=>t.id===activeTrackId?{...t,fx:{...t.fx,...fxVals}}:t)); toast.success('Mastering uygulandı!') }
+            if(activeTrackId) { setTracks(p=>p.map(t=>t.id===activeTrackId?{...t,fx:{...t.fx,...fxVals}}:t)); toast.success('Mastering applied!') }
             setMasterPanelOpen(false)
           }}
           onClose={()=>setMasterPanelOpen(false)}
@@ -1158,7 +1158,7 @@ export default function StudioPage({session}) {
             <span style={{lineHeight:'1',fontSize:'9px',fontWeight:'700'}}>Master</span>
           </button>
         )}
-        <button onClick={()=>{if(!activeTrackId){toast.error('Bir track seçin');return}setFxOpen(true)}} style={{width:'56px',height:'56px',borderRadius:'50%',background:'var(--primary)',color:'white',border:'none',fontSize:'10px',cursor:'pointer',boxShadow:'0 4px 12px rgba(14,165,233,0.3)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'2px'}}>
+        <button onClick={()=>{if(!activeTrackId){toast.error('Select a track');return}setFxOpen(true)}} style={{width:'56px',height:'56px',borderRadius:'50%',background:'var(--primary)',color:'white',border:'none',fontSize:'10px',cursor:'pointer',boxShadow:'0 4px 12px rgba(14,165,233,0.3)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'2px'}}>
           <span style={{fontSize:'20px',lineHeight:'1'}}>🎚️</span>
           <span style={{lineHeight:'1',fontSize:'9px',fontWeight:'700'}}>FX</span>
         </button>
